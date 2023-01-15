@@ -47,11 +47,13 @@ async function GetAllData(){
         const Dom = document.getElementById(id);
         
         Dom.addEventListener('click',(e)=>{
+            let target = e.target;
+            if(e.target.localName != "li") target = e.target.parentElement;
             DisplayChangeIcon('block');
-            e.target.className = "select";
+            target.className = "select";
             const activeDom = document.querySelectorAll('.select');
             activeDom.forEach((dom)=>{
-                if(dom.id == e.target.id)return;
+                if(dom.id == target.id)return;
                 dom.className = "noSelect";
             });
             console.log(activeDom);
@@ -95,11 +97,13 @@ async function GetCompletionData(){
     ids.forEach((id)=>{
         const Dom = document.getElementById(id);
         Dom.addEventListener('click',(e)=>{
+            let target = e.target;
+            if(e.target.localName != "li") target = e.target.parentElement;
             DisplayChangeIcon('block');
-            e.target.className = "select";
+            target.className = "select";
             const activeDom = document.querySelectorAll('.select');
             activeDom.forEach((dom)=>{
-                if(dom.id == e.target.id)return;
+                if(dom.id == target.id)return;
                 dom.className = "noSelect";
             });
             console.log(activeDom);
@@ -142,11 +146,13 @@ async function GetIncompleteData(){
     ids.forEach((id)=>{
         const Dom = document.getElementById(id);
         Dom.addEventListener('click',(e)=>{
+            let target = e.target;
+            if(e.target.localName != "li") target = e.target.parentElement;
             DisplayChangeIcon('block');
-            e.target.className = "select";
+            target.className = "select";
             const activeDom = document.querySelectorAll('.select');
             activeDom.forEach((dom)=>{
-                if(dom.id == e.target.id)return;
+                if(dom.id == target.id)return;
                 dom.className = "noSelect";
             });
             console.log(activeDom);
