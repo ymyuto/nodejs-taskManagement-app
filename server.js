@@ -24,7 +24,7 @@ async function close(){
 };
 
 app.use(express.static("public"));
-app.listen(PORT,function(){
+app.listen(process.env.PORT||PORT,function(){
     console.log("server起動");
 });
 
