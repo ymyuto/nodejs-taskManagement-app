@@ -22,8 +22,8 @@ let isOperation = false;
 const listDom = document.getElementById("list");
 
 async function GetAllData(){
+    if(isOperation) return;
     try{
-        if(isOperation) return;
         isOperation = true;
         DisplayChangeIcon("none");
         const memoData = await axios.get('/main/all',{
@@ -91,8 +91,8 @@ async function GetAllData(){
 };
 
 async function GetCompletionData(){
+    if(isOperation) return;
     try{
-        if(isOperation) return;
         isOperation = true;
         DisplayChangeIcon("none");
         const memoData = await axios.get('/main/completion',{
@@ -157,8 +157,8 @@ async function GetCompletionData(){
 };
 
 async function GetIncompleteData(){
+    if(isOperation) return;
     try{
-        if(isOperation) return;
         isOperation = true;
         DisplayChangeIcon("none");
         const memoData = await axios.get('/main/incomplete',{
@@ -279,8 +279,8 @@ addDom.addEventListener('click',(e)=>{
 const editDom = document.getElementById("edit");
 
 editDom.addEventListener('click',async(e)=>{
+    if(isOperation) return;
     try{
-        if(isOperation) return;
         isOperation = true;
         const submitBtnDom = document.getElementById("submitBtn");
         submitBtnDom.textContent = "更新";
@@ -308,8 +308,8 @@ editDom.addEventListener('click',async(e)=>{
 
 const deleteDom = document.getElementById("delete");
 deleteDom.addEventListener('click',async(e)=>{
+    if(isOperation) return;
     try{
-        if(isOperation) return;
         isOperation = true;
         const selectDom = document.getElementsByClassName("select");
         const id = selectDom[0].id;
@@ -332,10 +332,8 @@ deleteDom.addEventListener('click',async(e)=>{
 
 const formDom = document.getElementById('submitBtn');
 formDom.addEventListener('click',async(e)=>{
-    
-
+    if(isOperation) return;
     try{
-        if(isOperation)return;
         isOperation = true;
         const btnValue = e.target.textContent;
         e.preventDefault();
