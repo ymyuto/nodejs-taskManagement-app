@@ -17,6 +17,8 @@ function DisplayChangeIcon(dislplay){
     editDom.style.display = dislplay;
 };
 
+let isOperation = false;
+
 const listDom = document.getElementById("list");
 
 async function GetAllData(){
@@ -62,12 +64,20 @@ async function GetAllData(){
 
         const checkDom = Dom.querySelector("input");
         checkDom.addEventListener('change',async(e)=>{
-            const id = e.target.name;
-            console.log(id);
-            await axios.post('/main/check',{
-                id:id,
-                check:e.target.checked
-            });
+            try{
+                if(isOperation) return;
+                isOperation = true;
+                const id = e.target.name;
+                console.log(id);
+                await axios.post('/main/check',{
+                    id:id,
+                    check:e.target.checked
+                });
+            }catch{
+                console.log("err");
+            }finally{
+                isOperation = false;
+            };
         });
     });
 };
@@ -111,12 +121,20 @@ async function GetCompletionData(){
 
         const checkDom = Dom.querySelector("input");
         checkDom.addEventListener('change',async(e)=>{
-            const id = e.target.name;
-            console.log(id);
-            await axios.post('/main/check',{
-                id:id,
-                check:e.target.checked
-            });
+            try{
+                if(isOperation) return;
+                isOperation = true;
+                const id = e.target.name;
+                console.log(id);
+                await axios.post('/main/check',{
+                    id:id,
+                    check:e.target.checked
+                });
+            }catch{
+                console.log("err");
+            }finally{
+                isOperation = false;
+            };
         });
     });
 };
@@ -160,12 +178,20 @@ async function GetIncompleteData(){
 
         const checkDom = Dom.querySelector("input");
         checkDom.addEventListener('change',async(e)=>{
-            const id = e.target.name;
-            console.log(id);
-            await axios.post('/main/check',{
-                id:id,
-                check:e.target.checked
-            });
+            try{
+                if(isOperation) return;
+                isOperation = true;
+                const id = e.target.name;
+                console.log(id);
+                await axios.post('/main/check',{
+                    id:id,
+                    check:e.target.checked
+                });
+            }catch{
+                console.log("err");
+            }finally{
+                isOperation = false;
+            };
         });
     });
 };
@@ -227,88 +253,115 @@ addDom.addEventListener('click',(e)=>{
 const editDom = document.getElementById("edit");
 
 editDom.addEventListener('click',async(e)=>{
-    const submitBtnDom = document.getElementById("submitBtn");
-    submitBtnDom.textContent = "更新";
-    const selectDom = document.getElementsByClassName("select");
-    const id = selectDom[0].id;
-    const data = await axios.get('/main/idData',{
-        params:{
-            id:id,
-        }
-    });
-    const titleDom = document.getElementById("title");
-    titleDom.value = data.data.title;
-    newTitle = data.data.title;
-    const memoDom = document.getElementById("memo");
-    memoDom.value = data.data.content;
-    newMemo = data.data.content;
-    const dialogDom = document.getElementById("dialog");
-    dialogDom.style.display = "block";
+    try{
+        if(isOperation) return;
+        isOperation = true;
+        const submitBtnDom = document.getElementById("submitBtn");
+        submitBtnDom.textContent = "更新";
+        const selectDom = document.getElementsByClassName("select");
+        const id = selectDom[0].id;
+        const data = await axios.get('/main/idData',{
+            params:{
+                id:id,
+            }
+        });
+        const titleDom = document.getElementById("title");
+        titleDom.value = data.data.title;
+        newTitle = data.data.title;
+        const memoDom = document.getElementById("memo");
+        memoDom.value = data.data.content;
+        newMemo = data.data.content;
+        const dialogDom = document.getElementById("dialog");
+        dialogDom.style.display = "block";
+    }catch{
+        console.log("err");
+    }finally{
+        isOperation = false;
+    };
 });
 
 const deleteDom = document.getElementById("delete");
 deleteDom.addEventListener('click',async(e)=>{
-    const selectDom = document.getElementsByClassName("select");
-    const id = selectDom[0].id;
-    console.log(id);
-    await axios.delete('/main/delete',{
-        params:{
-            id:id,
-        }
-    });
-    selectDom[0].remove();
-    window.alert("削除しました。");
-    DisplayChangeIcon("none");
+    try{
+        if(isOperation) return;
+        isOperation = true;
+        const selectDom = document.getElementsByClassName("select");
+        const id = selectDom[0].id;
+        console.log(id);
+        await axios.delete('/main/delete',{
+            params:{
+                id:id,
+            }
+        });
+        selectDom[0].remove();
+        window.alert("削除しました。");
+        DisplayChangeIcon("none");
+    }catch{
+        console.log("err");
+    }finally{
+        isOperation = false;
+    };
 });
 
 
 const formDom = document.getElementById('submitBtn');
 formDom.addEventListener('click',async(e)=>{
-    const btnValue = e.target.textContent;
-    e.preventDefault();
-    console.log(btnValue);
-    if(btnValue == "追加"){
-        if(!newTitle)return;
-        if(!newMemo)return;
-        const memoData = await axios.post('main/add',{
-            userId:GetCookie_Value("Id"),
-            title:newTitle,
-            content:newMemo
-        });
+    
 
-        console.log(memoData);
-
-        const memo =`
-        <li id="${memoData.data._id}" class="noSelect">
-            <input type="checkbox">
-            <p>${memoData.data.title}</p>
-        </li>`
-
-        listDom.insertAdjacentHTML('beforeend', memo);
-
-        const dialogDom = document.getElementById("dialog");
-        dialogDom.style.display = "none";
-
-        window.alert("追加しました。");
-
-    };
-
-    if(btnValue == "更新"){
-        if(!newTitle)return;
-        if(!newMemo)return;
-        const selectDom = document.getElementsByClassName("select");
-        const id = selectDom[0].id;
-        const memoData = await axios.post('main/edit',{
-            id:id,
-            title:newTitle,
-            content:newMemo
-        });
-        const liDom = document.getElementById(id);
-        const pDom = liDom.querySelector("p");
-        pDom.textContent = newTitle;
-
-        window.alert("更新しました。");
-    };
+    try{
+        if(isOperation)return;
+        isOperation = true;
+        const btnValue = e.target.textContent;
+        e.preventDefault();
+        console.log(btnValue);
+        if(btnValue == "追加"){
+            if(!newTitle)return;
+            if(!newMemo)return;
+            const memoData = await axios.post('main/add',{
+                userId:GetCookie_Value("Id"),
+                title:newTitle,
+                content:newMemo
+            });
+    
+            console.log(memoData);
+    
+            const memo =`
+            <li id="${memoData.data._id}" class="noSelect">
+                <input type="checkbox">
+                <p>${memoData.data.title}</p>
+            </li>`
+    
+            listDom.insertAdjacentHTML('beforeend', memo);
+    
+            const dialogDom = document.getElementById("dialog");
+            dialogDom.style.display = "none";
+    
+            window.alert("追加しました。");
+    
+        };
+    
+        if(btnValue == "更新"){
+            if(!newTitle)return;
+            if(!newMemo)return;
+            const selectDom = document.getElementsByClassName("select");
+            const id = selectDom[0].id;
+            const memoData = await axios.post('main/edit',{
+                id:id,
+                title:newTitle,
+                content:newMemo
+            });
+            const liDom = document.getElementById(id);
+            const pDom = liDom.querySelector("p");
+            pDom.textContent = newTitle;
+    
+            window.alert("更新しました。");
+        };
+    
+    }catch{
+        console.log("err");
+    }finally{
+        isOperation = false;
+    }
 });
 
 const backBtn = document.getElementById("backBtn");
