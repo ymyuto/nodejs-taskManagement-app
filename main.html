@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css" type="text/css">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <div class="btns">
+            <a class="onBtn" id="all">全て</a>
+            <a class="offBtn" id="incomplete">未完了</a>
+            <a class="offBtn" id="completion">完了</a>
+        </div>
+    </header>
+    <footer>
+            <div class="circlee left">
+            </div>
+        </div>
+        <div class="rightIcon">
+            <div class="circle right" id="add">
+                <img src="img/Plus.png">
+            </div>
+            <div class="circle right" id="delete">
+                <img src="img/GarbageCan.png">
+            </div>
+            <div class="circle right" id="edit">
+                <img src="img/Pen.png">
+            </div>
+        </div>
+    </footer>
+    <div class="dialog" id="dialog">
+        <div id="form" class="form">
+            <input id="title" type="text" name="title" placeholder="タイトル">
+            <textarea rows="5" cols="80"placeholder="メモ" id="memo"></textarea>
+            <div class="btns">
+                <button type="submit" class="btn" id="submitBtn">追加</button>
+                <button class="btn" id="backBtn">戻る</button>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <ul id="list">
+        </ul>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/mainScript.js"></script>
+</body>
+</html>
