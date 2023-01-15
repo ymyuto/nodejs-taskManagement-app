@@ -22,178 +22,204 @@ let isOperation = false;
 const listDom = document.getElementById("list");
 
 async function GetAllData(){
-    DisplayChangeIcon("none");
-    const memoData = await axios.get('/main/all',{
-        params:{
-            userId:GetCookie_Value("Id"),
-        }
-    });
-
-    console.log(memoData);
-    let ids = [];
-
-    const allMemo = await memoData.data.map((memo)=>{
-        ids.push(memo._id);
-        let check = "";
-        if(memo.completion) check = "checked";
-        return `
-        <li id="${memo._id}" class="noSelect">
-            <input type="checkbox" name="${memo._id}" ${check}>
-            <p>${memo.title}</p>
-        </li>`
-    }).join("");
-
-    listDom.innerHTML = allMemo;
-
-    ids.forEach((id)=>{
-        const Dom = document.getElementById(id);
-        
-        Dom.addEventListener('click',(e)=>{
-            let target = e.target;
-            if(e.target.localName != "li") target = e.target.parentElement;
-            DisplayChangeIcon('block');
-            target.className = "select";
-            const activeDom = document.querySelectorAll('.select');
-            activeDom.forEach((dom)=>{
-                if(dom.id == target.id)return;
-                dom.className = "noSelect";
-            });
-            console.log(activeDom);
+    try{
+        if(isOperation) return;
+        isOperation = true;
+        DisplayChangeIcon("none");
+        const memoData = await axios.get('/main/all',{
+            params:{
+                userId:GetCookie_Value("Id"),
+            }
+        });
+    
+        console.log(memoData);
+        let ids = [];
+    
+        const allMemo = await memoData.data.map((memo)=>{
+            ids.push(memo._id);
+            let check = "";
+            if(memo.completion) check = "checked";
+            return `
+            <li id="${memo._id}" class="noSelect">
+                <input type="checkbox" name="${memo._id}" ${check}>
+                <p>${memo.title}</p>
+            </li>`
+        }).join("");
+    
+        listDom.innerHTML = allMemo;
+    
+        ids.forEach((id)=>{
+            const Dom = document.getElementById(id);
             
-        });
-
-        const checkDom = Dom.querySelector("input");
-        checkDom.addEventListener('change',async(e)=>{
-            try{
-                if(isOperation) return;
-                isOperation = true;
-                const id = e.target.name;
-                console.log(id);
-                await axios.post('/main/check',{
-                    id:id,
-                    check:e.target.checked
+            Dom.addEventListener('click',(e)=>{
+                let target = e.target;
+                if(e.target.localName != "li") target = e.target.parentElement;
+                DisplayChangeIcon('block');
+                target.className = "select";
+                const activeDom = document.querySelectorAll('.select');
+                activeDom.forEach((dom)=>{
+                    if(dom.id == target.id)return;
+                    dom.className = "noSelect";
                 });
-            }catch{
-                console.log("err");
-            }finally{
-                isOperation = false;
-            };
+                console.log(activeDom);
+                
+            });
+    
+            const checkDom = Dom.querySelector("input");
+            checkDom.addEventListener('change',async(e)=>{
+                try{
+                    if(isOperation) return;
+                    isOperation = true;
+                    const id = e.target.name;
+                    console.log(id);
+                    await axios.post('/main/check',{
+                        id:id,
+                        check:e.target.checked
+                    });
+                }catch{
+                    console.log("err");
+                }finally{
+                    isOperation = false;
+                };
+            });
         });
-    });
+    }catch{
+        console.log("err");
+    }finally{
+        isOperation = false;
+    };
 };
 
 async function GetCompletionData(){
-    DisplayChangeIcon("none");
-    const memoData = await axios.get('/main/completion',{
-        params:{
-            userId:GetCookie_Value("Id"),
-        }
-    });
-
-    console.log(memoData);
-    let ids = [];
-
-    const allMemo = memoData.data.map((memo)=>{
-        ids.push(memo._id);
-        return `
-        <li id="${memo._id}" class="noSelect">
-            <input type="checkbox" name="${memo._id}" checked>
-            <p>${memo.title}</p>
-        </li>`
-    }).join("");
-
-    listDom.innerHTML = allMemo;
-
-    ids.forEach((id)=>{
-        const Dom = document.getElementById(id);
-        Dom.addEventListener('click',(e)=>{
-            let target = e.target;
-            if(e.target.localName != "li") target = e.target.parentElement;
-            DisplayChangeIcon('block');
-            target.className = "select";
-            const activeDom = document.querySelectorAll('.select');
-            activeDom.forEach((dom)=>{
-                if(dom.id == target.id)return;
-                dom.className = "noSelect";
-            });
-            console.log(activeDom);
+    try{
+        if(isOperation) return;
+        isOperation = true;
+        DisplayChangeIcon("none");
+        const memoData = await axios.get('/main/completion',{
+            params:{
+                userId:GetCookie_Value("Id"),
+            }
         });
-
-        const checkDom = Dom.querySelector("input");
-        checkDom.addEventListener('change',async(e)=>{
-            try{
-                if(isOperation) return;
-                isOperation = true;
-                const id = e.target.name;
-                console.log(id);
-                await axios.post('/main/check',{
-                    id:id,
-                    check:e.target.checked
+    
+        console.log(memoData);
+        let ids = [];
+    
+        const allMemo = memoData.data.map((memo)=>{
+            ids.push(memo._id);
+            return `
+            <li id="${memo._id}" class="noSelect">
+                <input type="checkbox" name="${memo._id}" checked>
+                <p>${memo.title}</p>
+            </li>`
+        }).join("");
+    
+        listDom.innerHTML = allMemo;
+    
+        ids.forEach((id)=>{
+            const Dom = document.getElementById(id);
+            Dom.addEventListener('click',(e)=>{
+                let target = e.target;
+                if(e.target.localName != "li") target = e.target.parentElement;
+                DisplayChangeIcon('block');
+                target.className = "select";
+                const activeDom = document.querySelectorAll('.select');
+                activeDom.forEach((dom)=>{
+                    if(dom.id == target.id)return;
+                    dom.className = "noSelect";
                 });
-            }catch{
-                console.log("err");
-            }finally{
-                isOperation = false;
-            };
+                console.log(activeDom);
+            });
+    
+            const checkDom = Dom.querySelector("input");
+            checkDom.addEventListener('change',async(e)=>{
+                try{
+                    if(isOperation) return;
+                    isOperation = true;
+                    const id = e.target.name;
+                    console.log(id);
+                    await axios.post('/main/check',{
+                        id:id,
+                        check:e.target.checked
+                    });
+                }catch{
+                    console.log("err");
+                }finally{
+                    isOperation = false;
+                };
+            });
         });
-    });
+
+    }catch{
+        console.log("err");
+    }finally{
+        isOperation = false;
+    };
 };
 
 async function GetIncompleteData(){
-    DisplayChangeIcon("none");
-    const memoData = await axios.get('/main/incomplete',{
-        params:{
-            userId:GetCookie_Value("Id"),
-        }
-    });
-
-    console.log(memoData);
-    let ids = [];
-
-    const allMemo = memoData.data.map((memo)=>{
-        ids.push(memo._id);
-        return `
-        <li id="${memo._id}" class="noSelect">
-            <input type="checkbox" name="${memo._id}">
-            <p>${memo.title}</p>
-        </li>`
-    }).join("");
-
-    listDom.innerHTML = allMemo;
-
-    ids.forEach((id)=>{
-        const Dom = document.getElementById(id);
-        Dom.addEventListener('click',(e)=>{
-            let target = e.target;
-            if(e.target.localName != "li") target = e.target.parentElement;
-            DisplayChangeIcon('block');
-            target.className = "select";
-            const activeDom = document.querySelectorAll('.select');
-            activeDom.forEach((dom)=>{
-                if(dom.id == target.id)return;
-                dom.className = "noSelect";
-            });
-            console.log(activeDom);
+    try{
+        if(isOperation) return;
+        isOperation = true;
+        DisplayChangeIcon("none");
+        const memoData = await axios.get('/main/incomplete',{
+            params:{
+                userId:GetCookie_Value("Id"),
+            }
         });
-
-        const checkDom = Dom.querySelector("input");
-        checkDom.addEventListener('change',async(e)=>{
-            try{
-                if(isOperation) return;
-                isOperation = true;
-                const id = e.target.name;
-                console.log(id);
-                await axios.post('/main/check',{
-                    id:id,
-                    check:e.target.checked
+    
+        console.log(memoData);
+        let ids = [];
+    
+        const allMemo = memoData.data.map((memo)=>{
+            ids.push(memo._id);
+            return `
+            <li id="${memo._id}" class="noSelect">
+                <input type="checkbox" name="${memo._id}">
+                <p>${memo.title}</p>
+            </li>`
+        }).join("");
+    
+        listDom.innerHTML = allMemo;
+    
+        ids.forEach((id)=>{
+            const Dom = document.getElementById(id);
+            Dom.addEventListener('click',(e)=>{
+                let target = e.target;
+                if(e.target.localName != "li") target = e.target.parentElement;
+                DisplayChangeIcon('block');
+                target.className = "select";
+                const activeDom = document.querySelectorAll('.select');
+                activeDom.forEach((dom)=>{
+                    if(dom.id == target.id)return;
+                    dom.className = "noSelect";
                 });
-            }catch{
-                console.log("err");
-            }finally{
-                isOperation = false;
-            };
+                console.log(activeDom);
+            });
+    
+            const checkDom = Dom.querySelector("input");
+            checkDom.addEventListener('change',async(e)=>{
+                try{
+                    if(isOperation) return;
+                    isOperation = true;
+                    const id = e.target.name;
+                    console.log(id);
+                    await axios.post('/main/check',{
+                        id:id,
+                        check:e.target.checked
+                    });
+                }catch{
+                    console.log("err");
+                }finally{
+                    isOperation = false;
+                };
+            });
         });
-    });
+
+    }catch{
+        console.log("err");
+    }finally{
+        isOperation = false;
+    };
 };
 
 const allDom = document.getElementById("all");
@@ -359,6 +385,7 @@ formDom.addEventListener('click',async(e)=>{
     
     }catch{
         console.log("err");
+
     }finally{
         isOperation = false;
     }
